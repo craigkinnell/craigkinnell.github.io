@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DAL Probe — test sign-in</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 16px/1.5 system-ui, sans-serif; margin: 0; padding: 24px; max-width: 34rem; }
+  h1 { font-size: 1.3rem; }
+  label { display: block; margin: 14px 0 4px; font-weight: 600; }
+  input { width: 100%; padding: 10px; font-size: 16px; box-sizing: border-box; }
+  button { margin-top: 18px; padding: 12px 18px; font-size: 16px; width: 100%; }
+  .note { background: #8881; padding: 12px; border-radius: 6px; margin-top: 22px; font-size: 14px; }
+  code { font-family: ui-monospace, monospace; }
+</style>
+
+<h1>Digital Asset Links test sign-in</h1>
+
+<p>A throwaway form whose only purpose is to get a password saved for this origin, so that an
+Android application can then be tested against the <code>get_login_creds</code> statement
+published at <code>/.well-known/assetlinks.json</code>.</p>
+
+<p><strong>Invent a username and password here.</strong> Nothing is transmitted anywhere and
+nothing is checked — the page is static and there is no server to receive it.</p>
+
+<form id="f" method="get" action="signed-in.html" autocomplete="on">
+  <label for="username">Username</label>
+  <input id="username" name="username" type="text" autocomplete="username" required
+         value="dal-probe-user">
+
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" required
+         value="not-a-real-password-7Q2x">
+
+  <button type="submit">Sign in</button>
+</form>
+
+<div class="note">
+  <strong>If the browser does not offer to save the password</strong>, press the button below.
+  It calls the Credential Management API directly, which writes to the browser password store
+  without depending on form-submission heuristics.
+  <button type="button" id="store">Store credential via navigator.credentials</button>
+  <p id="out"></p>
+</div>
+
+<script>
+  // The form posts nowhere -- a GET to a static page is enough to trigger Chrome's
+  // save-password heuristic. The explicit API call below is the reliable path when it doesn't.
+  document.getElementById('store').addEventListener('click', async () => {
+    const out = document.getElementById('out');
+    try {
+      if (!window.PasswordCredential) {
+        out.textContent = 'PasswordCredential is not available in this browser.';
+        return;
+      }
+      const cred = new PasswordCredential({
+        id: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+        name: 'DAL probe test account'
+      });
+      await navigator.credentials.store(cred);
+      out.textContent = 'Stored. Check the browser password manager for this origin.';
+    } catch (e) {
+      out.textContent = 'Failed: ' + e;
+    }
+  });
+</script>

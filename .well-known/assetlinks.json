@@ -1,0 +1,28 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds",
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.vfresearch.dalprobe",
+      "sha256_cert_fingerprints": [
+        "FC:F9:62:01:02:BA:C6:1B:CE:71:15:FA:D1:C6:9E:29:73:10:9B:5D:77:B1:45:DD:6C:62:88:C1:F6:20:4E:85"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds",
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.vfresearch.dalprobe.control",
+      "sha256_cert_fingerprints": [
+        "FC:F9:62:01:02:BA:C6:1B:CE:71:15:FA:D1:C6:9E:29:73:10:9B:5D:77:B1:45:DD:6C:62:88:C1:F6:20:4E:85"
+      ]
+    }
+  }
+]
